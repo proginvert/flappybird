@@ -1,0 +1,170 @@
+<link href="sd.css" rel="stylesheet">
+<canvas id="ctx" width="500px" height="500px" style="border: solid 1px"></canvas>
+
+<div id="main" style="position:absolute;top:230px;left:8px">
+<div id="tittle" style="color:#000000">Сложность игры:</div><br>
+<button class="custom-btn btn-1" id="btn1">Легкая</button><button class="custom-btn btn-2" id="btn2">Средняя</button><button class="custom-btn btn-5" id="btn3">Тяжелая</button>
+</div>
+<script> 
+ctx = document.getElementById('ctx').getContext('2d')
+var pl = new Image()
+pl.src = '106-1068816_pocket-edition-flappy-bird-pixel-art-image-flappy.png'
+var en1 = new Image()
+en1.src = 'angry-birds-png-29.png'
+var en2 = new Image()
+en2.src = 'pngwing.png'
+var background = new Image()
+background.src = 'Без названия.jpg'
+
+document.onmousemove = function(event){
+console.log(event.clientX) 
+}
+var hrd = 'невыбранном'
+var scr= 0
+var gamestate = 0
+var timer = 0
+var bg = 0
+var enemyspeed = 1
+var match = 30
+var player = {
+x:35,
+y:100,
+speedy:-2
+}
+btn1.onclick=function(){
+gamestate = 1
+enemyspeed = 4
+main.style.display = 'none'
+
+hrd = 'Легком'
+match = 30
+}
+btn2.onclick=function(){
+gamestate = 1
+enemyspeed = 8
+main.style.display = 'none'
+
+hrd = 'Среднем'
+match = 15
+}
+btn3.onclick=function(){
+gamestate = 1
+enemyspeed = 16
+main.style.display = 'none'
+
+hrd = 'Тяжелым'
+match = 5
+}
+document.onmousedown = function(mouse){
+player.speedy = -10
+}
+pupdt = function(player){
+//player.speedx = player.x
+player.uspeedy = 0.5
+
+player.speedy = player.speedy + player.uspeedy
+player.y = player.y + player.speedy
+//player.uspeedx =
+//player.uspeedy =
+if(player.y>500){
+player.y=500
+player.speedy = 0
+}
+}
+var enemyList = {};
+var menulist = {}
+sda = function(){
+var self = {
+s:123,
+
+
+}
+
+
+return self;
+}
+function wall(id,x,y){
+	var enemy3 = {
+		x:x,
+		
+		y:y,
+		
+		
+		id:id,
+	};
+	enemyList[id] = enemy3;
+}
+var asdasd = function(){
+var aa = 2 * 2
+return aa
+}
+ 
+console.log(asdasd)
+var asas = 0
+for(var i = 0; i<5;i++){
+var id = Math.random()
+var tst = {}
+tst.x=Math.random()*480
+tst.y=Math.random()*480
+tst.sx= -2+Math.random()*4
+tst.sy= -2+Math.random()*4
+menulist[id]=tst
+}
+setInterval(function(){
+if(gamestate===1){
+if(asas === 1)
+//location.reload();
+ctx.clearRect(0,0,500,500)
+ctx.drawImage(background,bg,0,1500,500)
+timer++
+bg--
+if(bg<-456)
+bg=0
+if(timer%25===0)
+scr++
+if(timer % match === 0)
+wall(Math.random(),520,Math.round(Math.random()* 470))
+for(var key in enemyList){
+enemyList[key].x -= enemyspeed
+if(enemyList[key].id<0.5){
+enemyList[key].x -= enemyspeed/3
+ctx.fillRect(enemyList[key].x,enemyList[key].y,5,5)
+ctx.drawImage(en1,enemyList[key].x-20,enemyList[key].y-20,20*2,20*2)
+}else{
+ctx.fillRect(enemyList[key].x,enemyList[key].y,5,5)
+ctx.drawImage(en2,enemyList[key].x-20,enemyList[key].y-20,20*2,20*2)
+}
+if(enemyList[key].x>player.x-20&&enemyList[key].x<player.x+20&&
+	enemyList[key].y>player.y-20&&enemyList[key].y<player.y+20){
+	player.y=-35
+	location.reload();
+	alert('Вы проиграли на '+hrd+' уровне сложности, набрав при этом '+scr+' очков')
+	}
+if (enemyList[key].x < -20)
+delete enemyList[key]
+}
+//ctx.fillRect(player.x,player.y,20,20)
+ctx.save()
+ctx.translate(player.x,player.y)
+ctx.rotate(player.speedy*5*Math.PI/180)
+ctx.translate(-player.x,-player.y)
+ctx.fillRect(player.x,player.y,5,5)
+ctx.drawImage(pl,player.x-25,player.y-25,50,50)
+ctx.restore()
+pupdt(player)
+}else{
+ctx.clearRect(0,0,500,500)
+for(var i in menulist){
+menulist[i].x+=menulist[i].sx
+menulist[i].y+=menulist[i].sy
+if(menulist[i].x<0||menulist[i].x>500)
+menulist[i].sx=-menulist[i].sx
+if(menulist[i].y<0||menulist[i].y>500)
+menulist[i].sy=-menulist[i].sy
+ctx.fillRect(menulist[i].x,menulist[i].y,5,5)
+ctx.drawImage(en1,menulist[i].x-20,menulist[i].y-20,20*2,20*2)
+}
+
+}
+},1000/30)
+</script>
